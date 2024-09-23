@@ -1,0 +1,314 @@
+﻿@model AiTimanMVC.Models.UsersViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h4>Register</h4>
+
+<div id="form-container" style="max-height: 500px; overflow-y: scroll;">
+    <form asp-action="Register">
+        <div asp-asp-validation-summary="ModelOnly" class="text-danger">
+        @* Step Indicators *@
+        <div class="step-indicator mb-4">
+            <span class="step" id="step-1"> 1</span>
+            <span class="step" id="step-2"> 2</span>
+            <span class="step" id="step-3"> 3</span>
+            <span class="step" id="step-4"> 4</span>
+        </div>
+
+        <fieldset id="step-1-fieldset">
+            <h4>Step 1: Account Information</h4>
+            <div class="form-group">
+                <label asp-for="UserName"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
+        </fieldset>
+
+        <fieldset id="step-2-fieldset" style="display:none;">
+            <h4>Step 2: Personal Information</h4>
+            <div class="form-group">
+                <label asp-for="FirstName"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MiddleName"></label>
+                <input asp-for="MiddleName" class="form-control" />
+                <span asp-validation-for="MiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Birthdate"></label>
+                <input asp-for="Birthdate" type="date" class="form-control" onchange="checkAge()" />
+                <span asp-validation-for="Birthdate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender"></label>
+                <select asp-for="Gender" class="form-control">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Previous</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
+        </fieldset>
+
+        <fieldset id="step-3-fieldset" style="display:none;">
+            <h4>Step 3: Additional Information</h4>
+            <div class="form-group">
+                <label asp-for="Address"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CivilStatus"></label>
+                <select asp-for="CivilStatus" class="form-control">
+                    <option value="">Select Civil Status</option>
+                    <option value="Single">Single</option>
+                    <option value="Married">Married</option>
+                    <option value="Divorced">Divorced</option>
+                </select>
+                <span asp-validation-for="CivilStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Religion"></label>
+                <input asp-for="Religion" class="form-control" />
+                <span asp-validation-for="Religion" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="guardianField" style="display:none;">
+                <label asp-for="GuardianName"></label>
+                <input asp-for="GuardianName" class="form-control" />
+                <span asp-validation-for="GuardianName" class="text-danger"></span>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="prevStep(3)">Previous</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next</button>
+        </fieldset>
+
+        <fieldset id="step-4-fieldset" style="display:none;">
+            <h4>Step 4: Profile Picture</h4>
+            <div class="form-group">
+                <label asp-for="ProfilePic">Upload Profile Picture</label>
+                <input asp-for="ProfilePic" type="file" class="form-control" />
+                <span asp-validation-for="ProfilePic" class="text-danger"></span>
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="prevStep(4)">Previous</button>
+            <button type="submit" value="Register" class="btn btn-success">Submit</button>
+        </fieldset>
+        </div>
+    </form>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function nextStep(step) {
+            document.getElementById(`step-${step}-fieldset`).style.display = 'none';
+            document.getElementById(`step-${step + 1}-fieldset`).style.display = 'block';
+
+            // Highlight current step
+            document.getElementById(`step-${step}`).classList.remove("current-step");
+            document.getElementById(`step-${step + 1}`).classList.add("current-step");
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step-${step}-fieldset`).style.display = 'none';
+            document.getElementById(`step-${step - 1}-fieldset`).style.display = 'block';
+
+            // Highlight previous step
+            document.getElementById(`step-${step}`).classList.remove("current-step");
+            document.getElementById(`step-${step - 1}`).classList.add("current-step");
+        }
+
+        function checkAge() {
+            const birthdateInput = document.querySelector('[name="Birthdate"]');
+            const birthdate = new Date(birthdateInput.value);
+            const today = new Date();
+            const age = today.getFullYear() - birthdate.getFullYear();
+            const ageCheckDate = new Date(today.setFullYear(today.getFullYear() - age));
+
+            if (birthdate > ageCheckDate) {
+                age--;
+            }
+
+            // Show GuardianName field if age is less than 18 or greater than or equal to 60
+            const guardianField = document.getElementById('guardianField');
+            if (age < 18 || age >= 60) {
+                guardianField.style.display = 'block';
+            } else {
+                guardianField.style.display = 'none';
+            }
+        }
+    </script>
+}
+
+
+
+<style>
+    .step-indicator {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+    }
+
+    .step {
+        padding: 10px;
+        border-radius: 50%;
+        background-color: #ccc;
+        color: white;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .current-step {
+        background-color: #007bff;
+    }
+
+    fieldset {
+        border: none;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    button {
+        margin-top: 1rem;
+    }
+    /* General Styling */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        height: 100vh;
+    }
+
+    /* Login Page Styling */
+    .login-page {
+        width: 100%;
+        height: 90%;
+    }
+
+    /* Form Container */
+    .form-container {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
+        width: 100%;
+        max-height: 80vh; /* Adjust based on your needs */
+        overflow-y: auto;
+        max-width: 400px;
+        margin: 0 1rem;
+    }
+
+    /* Form Title */
+    .form-title {
+        text-align: center;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: #333;
+    }
+
+    /* Input Group */
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+
+    /* Input Labels */
+    .input-label {
+        display: block;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        color: #555;
+    }
+
+    /* Input Fields */
+    .input-field {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+
+        .input-field:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+    /* Error Message Styling */
+    .error-message {
+        color: #e74c3c;
+        font-size: 0.85rem;
+    }
+
+    /* Checkbox Styling */
+    .checkbox-label {
+        margin-left: 0.5rem;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+    /* Buttons */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
+    }
+
+    .btn-login {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .btn-login:hover {
+            background-color: #0056b3;
+        }
+
+    /* Form Footer Links */
+    .form-footer {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+        .form-footer .link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+            .form-footer .link:hover {
+                text-decoration: underline;
+            }
+</style>
