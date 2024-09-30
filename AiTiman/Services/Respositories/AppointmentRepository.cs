@@ -32,32 +32,23 @@ namespace AiTiman_API.Services.Respositories
                 return (false, "Appointment name is required.");
             }
 
-            // Validate AppointmentStatus
-            if (string.IsNullOrWhiteSpace(createAppointment.AppointmentStatus))
-            {
-                return (false, "Appointment status is required.");
-            }
-
-            // Validate AppointmentSetter
-            if (string.IsNullOrWhiteSpace(createAppointment.AppointmentSetter))
-            {
-                return (false, "Appointment setter is required.");
-            }
-
-            // Validate ScheduleDate (Example: Ensure the appointment date is in the future)
+            // Validate ScheduleDate
             if (createAppointment.ScheduleDate < DateTime.Today)
             {
                 return (false, "Schedule date must be today or in the future.");
             }
 
-            // If all validations pass, create the new appointment
+            // Create the new appointment
             var newAppointment = new Appointment
             {
                 AppointmentName = createAppointment.AppointmentName,
                 ScheduleDate = createAppointment.ScheduleDate,
                 ScheduleTime = createAppointment.ScheduleTime,
-                AppointmentStatus = createAppointment.AppointmentStatus,
+                AppointmentStatus = createAppointment.AppointmentStatus, // Set automatically
                 AppointmentSetter = createAppointment.AppointmentSetter,
+                NumberOfSlots = createAppointment.NumberOfSlots.Value,
+                DoctorInCharge = createAppointment.DoctorInCharge,
+                // Set to the passed username
                 DateCreated = DateTime.UtcNow,
                 DateUpdated = DateTime.UtcNow
             };
@@ -152,6 +143,16 @@ namespace AiTiman_API.Services.Respositories
                 updateDefinition = updateDefinition.Set(x => x.AppointmentStatus, updateAppointment.AppointmentStatus);
             }
 
+            if (updateAppointment.NumberOfSlots.HasValue && updateAppointment.NumberOfSlots > 0)
+            {
+                updateDefinition = updateDefinition.Set(x => x.NumberOfSlots, updateAppointment.NumberOfSlots.Value);
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(updateAppointment.DoctorInCharge))
+            {
+                updateDefinition = updateDefinition.Set(x => x.DoctorInCharge, updateAppointment.DoctorInCharge);
+            }
             // Update the appointment in the database
             var result = await _appointmentCollection.UpdateOneAsync(x => x.Id == id, updateDefinition);
 

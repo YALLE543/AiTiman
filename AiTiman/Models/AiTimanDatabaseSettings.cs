@@ -9,5 +9,8 @@
         public string AppointmentCollectionName { get; set; } = null!;
 
         public string UsersCollectionName { get; set; } = null!;
+
+        public string BookedCollectionName { get; set; } = null!;
     }
 }
+

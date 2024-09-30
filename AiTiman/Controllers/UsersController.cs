@@ -54,6 +54,23 @@ namespace AiTiman_API.Controllers
             return Ok(message);
         }
 
+       
+        [HttpGet("GetUserProfile/{userName}")]
+        public async Task<IActionResult> GetUserProfile(string userName)
+        {
+            var user = await _Users.GetUserProfileByUsername(userName);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(new
+            {
+                user.UserName,
+                user.ProfilePic
+            });
+        }
+
         [HttpDelete("Delete-Users")]
         public async Task<IActionResult> DeleteUsers(string id)
         {
@@ -63,6 +80,27 @@ namespace AiTiman_API.Controllers
                 return BadRequest(message);
 
             return Ok(message);
+        }
+
+        [HttpPost("ValidateLogin")]
+        public async Task<IActionResult> ValidateLogin(LoginDTO login)
+        {
+            // Assuming _Users has a method to validate credentials
+            var user = await _Users.ValidateUser(login.UserName, login.Password);
+
+            if (user == null)
+            {
+                // Return Unauthorized status if the credentials are wrong
+                return Unauthorized("Invalid username or password");
+            }
+
+            // Return user data including role (you might want to return more details)
+            return Ok(new
+            {
+                user.UserName,
+                user.Role,
+                user.Email
+            });
         }
     }
 }

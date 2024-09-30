@@ -12,6 +12,7 @@ namespace AiTiman_API.Services.Respositories
         private readonly IMongoCollection<Users> _UsersCollection;
         public UsersRepository(IOptions<AiTimanDatabaseSettings> aiTimanDatabaseSettings)
         {
+
             if (aiTimanDatabaseSettings.Value.ConnectionString == null)
             {
                 throw new ArgumentNullException("ConnectionString is null");
@@ -75,6 +76,28 @@ namespace AiTiman_API.Services.Respositories
             await _UsersCollection.InsertOneAsync(newUsers);
 
             return (true, "New Users Created!");
+        }
+
+        public async Task<Users> GetUserByUserNameAsync(string userName)
+        {
+            return await _UsersCollection.Find(user => user.UserName == userName).FirstOrDefaultAsync();
+        }
+
+        public async Task<Users?> GetUserProfileByUsername(string username)
+        {
+            // Check if the username is null or empty
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                // Optionally, you could log this or throw an exception
+                return null; // Return null if the username is invalid
+            }
+
+            // Fetch the user profile by username
+            var user = await _UsersCollection.Find(user => user.UserName == username).FirstOrDefaultAsync();
+
+            // Optionally, log the retrieval or handle a specific case if user is not found
+
+            return user; // Return the found user or null if not found
         }
 
         public async Task<(bool, string)> DeleteUsers(string? id)
@@ -231,5 +254,22 @@ namespace AiTiman_API.Services.Respositories
             }
         }
 
+        public async Task<Users> ValidateUser(string username, string password)
+        {
+            // Query MongoDB to find the user by username
+            var user = await _UsersCollection.Find(u => u.UserName == username).FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                // Directly compare the plain text password
+                if (user.Password == password) // Avoid this for security reasons
+                {
+                    return user;
+                }
+            }
+
+            // Return null if user not found or password invalid
+            return null;
+        }
     }
 }

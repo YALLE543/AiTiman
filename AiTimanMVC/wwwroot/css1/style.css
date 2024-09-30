@@ -1795,9 +1795,10 @@ fieldset:disabled a.btn {
   pointer-events: none; }
 
 .btn-primary {
-  color: #fff;
-  background-color: #7571f9;
-  border-color: #7571f9; }
+    color: #fff;
+    background-color: #11cdef;
+    border-color: #7571f9;
+}
   .btn-primary:hover {
     color: #fff;
     background-color: #514cf7;
@@ -7675,13 +7676,14 @@ sub {
   display: block; }
 
 .header {
-  height: 5rem;
-  z-index: 1;
-  position: relative;
-  padding: 0 0.9375rem;
-  background-color:lightskyblue;
-  margin-left: 15.1875rem;
-  transition: all .2s ease; }
+    height: 5rem;
+    z-index: 1;
+    position: relative;
+    padding: 0 0.9375rem;
+    background-color:steelblue;
+    margin-left: 15.1875rem;
+    transition: all .2s ease;
+}
   .header .header-content {
     height: 100%; }
 

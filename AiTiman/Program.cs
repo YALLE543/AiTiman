@@ -1,5 +1,6 @@
 using AiTiman_API.Models;
 using AiTiman_API.Services.Interfaces;
+using AiTiman_API.Services.Repositories;
 using AiTiman_API.Services.Respositories;
 
 namespace AiTiman_API
@@ -18,7 +19,8 @@ namespace AiTiman_API
             // Add Scope of Interface and Repository
             builder.Services.AddScoped<IAppointment, AppointmentRepository>();
             builder.Services.AddScoped<IUsers, UsersRepository>();
-
+            builder.Services.AddScoped<IBooked, BookedRepository>();
+            builder.Services.AddSingleton<IUsers, UsersRepository>();
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -36,6 +38,8 @@ namespace AiTiman_API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

@@ -1,39 +1,31 @@
-﻿@model AiTimanMVC.Models.LoginViewModel
+﻿@model AiTimanMVC.Models.UsersViewModel
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Verify Code";
 }
-<div class="login-page">
+
+<div class="patient-registration-page">
     <div class="form-container">
-        <h2 class="form-title">Login</h2>
-
-            <form asp-action="Login" method="post">
-                <div class="form-floating">
-        <input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" />
-        <label asp-for="UserName" class="form-label"></label>
-        <span asp-validation-for="UserName" class="text-danger"></span>
-                </div>
-                    <div class="form-floating">
-                        <input asp-for="Password" class="form-control" type="password"autocomplete="current-password" aria-required="true" />
-                        <label asp-for="Password" class="form-label"></label>
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <br />
-                    <p>
-                        <a asp-action="Register" asp-controller="Users">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-action="Register" asp-controller="Users">Register as a new user</a>
-                    </p>
-                   
-                </div>
-            </form>
-       
-
+        <h2 class="form-title">@ViewData["Title"]</h2>
+        <form asp-action="VerifyCode" method="post">
+    <div class="form-group">
+        <p>"Enter the verification code sent to your email to complete your registration. </p>
+        <p>If you didn't receive the code, please check your spam folder or request a new one."</p>
+        <label >Verification Code</label>
+                <input type="text" asp-for="VerificationCode" class="form-control" />
+                <span asp-validation-for="VerificationCode" class="text-danger"></span>
+    </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select asp-for="Role" class="form-control" disabled>
+                    <option value="Patient" selected>Patient</option>
+                    <option value="HealthProvider" disabled>Health Provider (Not Available)</option>
+                    <option value="Admin" disabled>Admin (Not Available)</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+    <button type="submit" class="btn btn-primary">Verify</button>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+</form>
 </div>
 </div>
 
@@ -49,7 +41,7 @@
     /* Login Page Styling */
     .login-page {
         width: 100%;
-        height: 100%;
+        height: 90%;
     }
 
     /* Form Container */
@@ -59,6 +51,8 @@
         border-radius: 8px;
         box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
         width: 100%;
+        max-height: 80vh; /* Adjust based on your needs */
+        overflow-y: auto;
         max-width: 400px;
         margin: 0 1rem;
     }
@@ -66,7 +60,7 @@
     /* Form Title */
     .form-title {
         text-align: center;
-        font-size: 1.8rem;
+        font-size: 1.5rem;
         margin-bottom: 1.5rem;
         color: #333;
     }

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<AiTimanMVC.Models.AppointmentViewModel>
+@{
+    ViewData["Title"] = "Appointments List";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <div class="container">
+
+        <!-- Create Appointment Button -->
+        <div class="create-appointment-box">
+            <a href="@Url.Action("Appointment", "HealthProvider")" class="btn btn-lg btn-primary">Create Appointment</a>
+        </div>
+
+        <h3 class="form-title">@ViewData["Title"]</h3>
+
+        <div class="appointments-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Appointment Name</th>
+                        <th>Schedule Date</th>
+                        <th>Schedule Time</th>
+                        <th>Number of Slots</th>
+                        <th>Doctor In Charge</th>
+                        <th>Set By</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var appointment in Model)
+                        {
+                            <tr>
+                                <td>@appointment.AppointmentName</td>
+                                <td>@appointment.ScheduleDate.ToString("MM/dd/yyyy")</td>
+                                <td>@appointment.ScheduleTime</td>
+                                <td>@appointment.NumberOfSlots</td>
+                                <td>@appointment.DoctorInCharge</td>
+                                <td>@appointment.AppointmentSetter</td>
+                                <td>@appointment.AppointmentStatus</td>
+                                <td>
+                                    <a href="@Url.Action("EditAppointment", "HealthProvider", new { id = appointment.Id })" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="@Url.Action("DeleteAppointment", "HealthProvider", new { id = appointment.Id })" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center">No appointments found.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    .create-appointment-box {
+        background-color: lightskyblue;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
+        margin-bottom: 20px; /* Add space below the box */
+        text-align:right; /* Center the content */
+    }
+
+    .appointments-table {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            background-color: lightskyblue;
+            color: white;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    .btn {
+        margin-right: 5px;
+    }
+</style>

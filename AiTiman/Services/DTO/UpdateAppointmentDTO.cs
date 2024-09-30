@@ -9,5 +9,9 @@
         public string? ScheduleTime { get; set; }
 
         public string? AppointmentStatus { get; set; }
+
+        public int? NumberOfSlots { get; set; }
+
+        public string? DoctorInCharge { get; set; }
     }
 }

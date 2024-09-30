@@ -10,5 +10,9 @@ namespace AiTiman_API.Services.Interfaces
         Task<Users?> fetchUsers(string? id);
         Task<(bool, string)> UpdateUsers(string id, UpdateUsersDTO updateUsers);
         Task<(bool, string)> DeleteUsers(string? id);
+        Task<Users> ValidateUser(string username, string password);
+        Task<Users?> GetUserProfileByUsername(string username);
+        Task<Users?> GetUserByUserNameAsync(string username);
     }
+
 }
