@@ -1,10 +1,14 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
+
 namespace AiTiman_API.Models
 {
     public class Booked
     {
+
+       
+
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
 
@@ -47,12 +51,14 @@ namespace AiTiman_API.Models
         public string? GuardianName { get; set; }
 
         [BsonElement("Booking Approved Date")]
-        public string? BookingApprovedDate { get; set; }
+        public DateTime? BookingApprovedDate { get; set; }
 
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
         [BsonElement("Date Updated")]
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
+
+
     }
 
 }

@@ -14,7 +14,7 @@ using AiTiman_API.Models;
 namespace AiTimanMVC.Controllers
 {
 
-    public class UsersController : Controller
+    public class UsersController : BaseController
     {
         Uri baseAddress = new Uri("https://localhost:7297/api"); // Use the correct port here
         private readonly HttpClient _client;
@@ -34,6 +34,28 @@ namespace AiTimanMVC.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Profile(string id)
+        {
+            try
+            {
+                var userId = User.FindFirstValue("UserId");
+                UsersViewModel users = new UsersViewModel();
+                HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Users/FetchUsers/Fetch-Users?id=" + userId).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    string data = response.Content.ReadAsStringAsync().Result;
+                    users = JsonConvert.DeserializeObject<UsersViewModel>(data);
+                }
+                return View(users);
+            }
+            catch (Exception ex)
+            {
+                TempData["errorMessage"] = ex.Message;
+                return View();
+            }
         }
 
         [HttpGet]
@@ -98,6 +120,7 @@ namespace AiTimanMVC.Controllers
                     // Create user claims
                     var claims = new List<Claim>
             {
+                new Claim("UserId", user.Id),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.Role, user.Role),
                 new Claim(ClaimTypes.Email, user.Email)
@@ -117,7 +140,7 @@ namespace AiTimanMVC.Controllers
                         case "HealthProvider":
                             return RedirectToAction("HealthProviderDashboard", "HealthProvider");
                         case "Patient":
-                            return RedirectToAction("PatientDashboard", "Patients");
+                            return RedirectToAction("PatientDashboard", "Patient");
                         default:
                             // Redirect to home if role is unknown
                             return RedirectToAction("Index", "Home");
@@ -146,12 +169,12 @@ namespace AiTimanMVC.Controllers
 
         //public IActionResult UserProfile()
         //{
-        //    // Fetch user profile using the correct method name
+        //    Fetch user profile using the correct method name
         //    var userProfile = _userService.GetUserProfileByUsername(User.Identity.Name); // Use GetUserProfileByUsername
 
         //    if (userProfile == null)
         //    {
-        //        // Handle the case where the user is not found
+        //        Handle the case where the user is not found
         //        return NotFound();
         //    }
 

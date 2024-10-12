@@ -1,4 +1,5 @@
 ﻿@model AiTimanMVC.Models.AppointmentViewModel
+
 @{
     ViewData["Title"] = "Delete Appointment";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -13,7 +14,7 @@
                 <div asp-validation-summary="All" class="text-danger"></div>
 
                 <div class="mb-3">
-                    <p>Are you sure you want to delete the appointment: <strong>@Model.AppointmentName</strong> scheduled for <strong>@Model.ScheduleDate.ToString("d")</strong> at <strong>@Model.ScheduleTime</strong>?</p>
+                    <p>Are you sure you want to delete the appointment: <strong>@Model.AppointmentName</strong> scheduled for <strong>@Model.ScheduleDate.ToString("d")</strong> at <strong>@Model.ScheduleTime?.FormattedTime</strong>?</p>
                 </div>
 
                 <input type="hidden" asp-for="Id" /> <!-- Assuming you have an Id property to identify the appointment -->

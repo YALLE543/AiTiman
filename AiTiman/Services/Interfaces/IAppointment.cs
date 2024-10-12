@@ -5,10 +5,12 @@ namespace AiTiman_API.Services.Interfaces
 {
     public interface IAppointment
     {
-        Task<(bool, string)> AddNewAppointment(CreateAppointmentDTO createAppointment);
+        Task<(bool, string)> AddNewAppointment(CreateAppointmentDTO createAppointment, string UserName);
         Task<List<Appointment>> fetchAppointments();
         Task<Appointment> fetchAppointment(string? id);
         Task<(bool, string)> UpdateAppointment(string id, UpdateAppointmentDTO updateAppointment);
         Task<(bool, string)> DeleteAppointment(string? id);
+
+        Task<List<DateTime>> FetchAppointmentDates();
     }
 }

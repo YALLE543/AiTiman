@@ -12,6 +12,8 @@ builder.Services.Configure<AiTimanDatabaseSettings>(
          builder.Configuration.GetSection("AiTimanDatabaseSettings"));
 
 builder.Services.AddTransient<VerificationService>();
+builder.Services.AddHttpClient();
+
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddSingleton<IUsers, UsersRepository>();

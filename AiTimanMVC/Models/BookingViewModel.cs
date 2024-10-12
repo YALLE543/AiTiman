@@ -1,76 +1,90 @@
 ﻿using Newtonsoft.Json;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using static AiTimanMVC.Models.AppointmentViewModel;
 
 namespace AiTimanMVC.Models
 {
-    public class AppointmentViewModel
+    public class BookingViewModel
     {
         public string? Id { get; set; }
+
 
         [Required]
         [DisplayName("Appointment Name")]
         public string? AppointmentName { get; set; }
 
-        [Required]
-        [DisplayName("Schedule Date")]
-        public DateTime ScheduleDate { get; set; }
+
+
+        [DisplayName("Appointment Schedule Date")]
+        public string? AppointmentScheduleDate { get; set; }
+
 
         [Required]
-        [DisplayName("Number of Slots")]
-        public int NumberOfSlots { get; set; }
+        [DisplayName("Appointment Schedule Time")]
+        public string? AppointmentScheduleTime { get; set; }
 
-        [Required]
-        [DisplayName("Appointment Status")]
-        public string? AppointmentStatus { get; set; } = "Open for Booking";
 
         [Required]
         [DisplayName("Doctor In Charge")]
-        public string? DoctorInCharge { get; set; }
+        public string? AppointmentDoctorInCharge { get; set; }
 
-        [DisplayName("Appointment Setter")]
-        public string? AppointmentSetter { get; set; }
-
-        public List<DateTime>? AppointmentDates { get; set; }
-
-        // Use Newtonsoft.Json.JsonConverter
-        [JsonConverter(typeof(TimeRangeConverter))]
-        public TimeRangeViewModel ScheduleTime { get; set; }
-
-        // Updated TimeSlots to store both time range and booking count
-        public Dictionary<string, TimeSlotViewModel> TimeSlots { get; set; } = new Dictionary<string, TimeSlotViewModel>();
+      
+       [Required]
+        [DisplayName("Patient Name")]
+        public string? PatientName { get; set; }
 
 
-        
         [Required]
+        [DisplayName("Address")]
+        public string? Address { get; set; }
+
+
+        [Required]
+        [DisplayName("Birthdate")]
+        public string? Birthdate { get; set; }
+
+
+        [Required]
+        [DisplayName("Age")]
+        public string? Age { get; set; }
+
+
+        [Required]
+        [DisplayName("Gender")]
+        public string? Gender { get; set; }
+
+
+        [Required]
+        [DisplayName("Guardian Name")]
+        public string? GuardianName { get; set; }
+
+
+      
+       [Required]
+       [DisplayName("Approved By")]
+        public string? ApprovedBy { get; set; }
+
+
+        [Required]
+        [DisplayName("Booking Status")]
+        public string? BookingStatus { get; set; } = "Pending";
+
+
+        [Required]
+        [DisplayName("Booking Approved Date")]
+        public string? BookingApprovedDate { get; set; }
+
+
         [DisplayName("Date Created")]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
 
+
+
         [DisplayName("Date Updated")]
+
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
 
-        public AppointmentViewModel()
-        {
-            TimeSlots = GenerateTimeSlots();
-        }
-
-        public class TimeRangeViewModel
-        {
-            public TimeSpan StartTime { get; set; }
-            public TimeSpan EndTime { get; set; }
-
-            public string FormattedTime
-            {
-                get
-                {
-                    // Format the StartTime and EndTime in 12-hour format without leading zeros
-                    return $"{(StartTime.Hours % 12 == 0 ? 12 : StartTime.Hours % 12)}:{StartTime.Minutes:D2} - " +
-                           $"{(EndTime.Hours % 12 == 0 ? 12 : EndTime.Hours % 12)}:{EndTime.Minutes:D2}";
-                }
-            }
-        }
-
-        // New class to store both time range and booking count
         public class TimeSlotViewModel
         {
             public TimeRangeViewModel TimeRange { get; set; }
@@ -80,7 +94,6 @@ namespace AiTimanMVC.Models
             {
                 get
                 {
-                    // Format the StartTime and EndTime in 12-hour format without leading zeros
                     return $"{(TimeRange.StartTime.Hours % 12 == 0 ? 12 : TimeRange.StartTime.Hours % 12)}:{TimeRange.StartTime.Minutes:D2} - " +
                            $"{(TimeRange.EndTime.Hours % 12 == 0 ? 12 : TimeRange.EndTime.Hours % 12)}:{TimeRange.EndTime.Minutes:D2}";
                 }
@@ -89,14 +102,14 @@ namespace AiTimanMVC.Models
 
 
 
-        // Updated to return TimeSlotViewModel for each slot
+      
         public Dictionary<string, TimeSlotViewModel> GenerateTimeSlots()
         {
             var slots = new Dictionary<string, TimeSlotViewModel>();
             DateTime startTime = DateTime.Today.AddHours(9); // 9 AM
             DateTime endTime = DateTime.Today.AddHours(17);  // 5 PM
 
-           
+
             while (startTime < endTime)
             {
                 slots.Add(startTime.ToString("h:mm tt"), new TimeSlotViewModel
@@ -113,21 +126,20 @@ namespace AiTimanMVC.Models
             return slots;
         }
 
-        // This is the TimeRangeConverter for Newtonsoft.Json
+       
         public class TimeRangeConverter : JsonConverter
         {
-            // This method is called to write the JSON representation of the object
+          
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
                 if (value is TimeRangeViewModel timeRange)
                 {
-                    // Convert TimeSpan to DateTime before formatting to handle AM/PM
                     DateTime startDateTime = DateTime.Today.Add(timeRange.StartTime);
                     DateTime endDateTime = DateTime.Today.Add(timeRange.EndTime);
 
-                    // Format the TimeRange as a string without leading zeros for hours
-                    string timeRangeString = $"{startDateTime.ToString("h:mm tt")} - {endDateTime.ToString("h:mm tt")}";
-                    writer.WriteValue(timeRangeString);
+
+                   string timeRangeString = $"{startDateTime.ToString("h:mm tt")} - {endDateTime.ToString("h:mm tt")}";
+                   writer.WriteValue(timeRangeString);
                 }
                 else
                 {
@@ -135,10 +147,8 @@ namespace AiTimanMVC.Models
                 }
             }
 
-            // This method is called to read the JSON representation of the object
             public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
             {
-                // Read the time range string from the JSON, e.g., "10:00 AM - 3:00 PM"
                 string timeRangeString = (string)reader.Value;
                 Console.WriteLine($"Parsing Time Range: {timeRangeString}"); // Log the input for debugging
 
@@ -156,12 +166,10 @@ namespace AiTimanMVC.Models
                 throw new JsonSerializationException("Invalid time range format.");
             }
 
-            // This method determines whether the converter can convert the specified type
             public override bool CanConvert(Type objectType)
             {
                 return objectType == typeof(TimeRangeViewModel);
             }
         }
-
     }
 }

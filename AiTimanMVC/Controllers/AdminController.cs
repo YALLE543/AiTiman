@@ -13,7 +13,7 @@ using AiTiman_API.Models;
 
 namespace AiTimanMVC.Controllers
 {
-    public class AdminController : Controller
+    public class AdminController : BaseController
     {
         Uri baseAddress = new Uri("https://localhost:7297/api"); // Use the correct port here
         private readonly HttpClient _client;
@@ -25,30 +25,31 @@ namespace AiTimanMVC.Controllers
             _client.BaseAddress = baseAddress;// Ensure the correct port
         }
 
-        // Admin Dashboard Action
         public IActionResult AdminDashboard()
         {
-            //string userName = User.Identity.Name;  // Get the logged-in user's username
-
-            //Call the API to get the user profile
-            //var response = await _client.GetAsync($"users/GetUserProfile/{userName}");
-
-            //if (!response.IsSuccessStatusCode)
-            //{
-            //    return View("Error"); // Handle error accordingly
-            //}
-
-            //Read the user profile data from the response
-            //var userResponse = await response.Content.ReadAsStringAsync();
-            //var user = JsonConvert.DeserializeObject<UserProfileViewModel>(userResponse);
-
-            //Pass the user profile to the view
             return View();
+            
         }
 
-        public IActionResult Index()
+         public IActionResult Index()
         {
             return View();
         }
+
+        public IActionResult AdminAccountList()
+        {
+            List<UsersViewModel> userslist = new List<UsersViewModel>();
+            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Users/AllUsers/All-Userss").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                string data = response.Content.ReadAsStringAsync().Result;
+                userslist = JsonConvert.DeserializeObject<List<UsersViewModel>>(data);
+            }
+
+            return View(userslist);
+        }
+
+        
     }
 }

@@ -1,0 +1,133 @@
+﻿@model AiTimanMVC.Models.UsersViewModel
+
+
+@{
+    ViewData["Title"] = "Admin Profile";
+    <p>@ViewData["ErrorMessage"]</p>
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row">
+
+            <div class="col-lg-4 col-xl-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="media align-items-center mb-4 position-relative">
+                            <!-- Profile Picture with Edit Icon -->
+                            @*<div class="position-relative">
+                                <!-- Image Preview -->
+                                @if (Model.ProfilePic != null && Model.ProfilePic.Length > 0)
+                                {
+                                    // Convert byte[] to Base64 string
+                                    var base64String = Convert.ToBase64String(Model.ProfilePic);
+                                    var imageSrc = $"data:image/png;base64,{base64String}";
+                                    <img id="profilePic" class="mr-3 rounded-circle"
+                                     src="@imageSrc"
+                                     width="80" height="80" alt="Profile Picture" />
+                                }
+                                else
+                                {
+                                    <img id="profilePic" class="mr-3 rounded-circle"
+                                     src="~/images/Timan/user.png"
+                                     width="80" height="80" alt="Profile Picture" />
+                                }
+                            </div>*@
+                        </div>
+                        <div class="row mb-5">
+                            <div class="col">
+                                <div class="card card-profile text-center">
+                                    <span class="mb-1 text-primary"><i class="icon-user"></i></span>
+                                    <h3 class="mb-0">@Model.Age</h3>
+                                    <p class="text-muted px-4"></p>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card card-profile text-center">
+                                    <span class="mb-1 text-warning"><i class="icon-folder"></i></span>
+                                    <h3 class="mb-0"></h3>
+                                    <p class="text-muted">Records</p>
+                                </div>
+                            </div>
+
+                            <div class="media-body">
+                                <h3 class="mb-0">@Model.UserName</h3>
+                                <p class="text-muted mb-0">@Model.Address</p>
+                                <p class="text-muted mb-0">@Model.Role</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-xl-9">
+                <div class="card shadow-card">
+                    <div class="card-body">
+                        <h4 class="card-title">Account Profile</h4>
+                        <div class="basic-form">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>Username: </strong>@Model.UserName</p>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>Email: </strong>@Model.Email</p>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>First Name: </strong>@Model.FirstName</p>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>Last Name: </strong>@Model.LastName</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <p class="text-muted mb-0"><strong>Complete Address: </strong>@Model.Address</p>
+                            </div>
+                            <div class="form-group">
+                                <p class="text-muted mb-0"><strong>Birthday: </strong>@Model.Birthdate</p>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>Religion: </strong>@Model.Religion</p>
+                                </div>
+                                @*<div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>Phone: </strong>@Model.PhoneNumber</p>
+                                </div>*@
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>Gender: </strong>@Model.Gender</p>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <p class="text-muted mb-0"><strong>Status: </strong>@Model.CivilStatus</p>
+                                </div>
+                            </div>
+
+                            @if ((DateTime.Now.Year - Model.Birthdate.Year) < 18 || (DateTime.Now.Year - Model.Birthdate.Year) >= 60)
+                            {
+                                    <div class="form-group" id="guardianNameGroup">
+                                        <p class="text-muted mb-0"><strong>Guardian Name: </strong>@Model.GuardianName</p>
+                                    </div>
+                            }
+
+                            <button type="button" class="btn edit-profile-btn mt-4" onclick="location.href='@Url.Action("EditProfile", "Users")'">
+                                Edit Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

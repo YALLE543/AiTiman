@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -200,16 +199,20 @@
                             </div>
                         </li>
                         <li class="icons dropdown">
+                            <div class="notification-content">
+                                <h2 class="notification-heading">@ViewBag.CurrentUser?.UserName</h2>
+                                <h3 class="notification-text">@ViewBag.CurrentUser?.Role</h3>
+                            </div>
                             <div class="user-img c-pointer position-relative" data-toggle="dropdown">
                                 <span class="activity active"></span>
-                                <img src="~/images/Timan/user.png" height="40" width="40" alt="">
+                                <img src="@ViewBag.CurrentUser?.ProfilePic" height="40" width="40" alt="">
                             </div>
 
                             <div class="drop-down dropdown-profile animated fadeIn dropdown-menu">
                                 <div class="dropdown-content-body">
                                     <ul>
                                         <li>
-                                            <a href="/Admin/AdminProfile"><i class="icon-user"></i> <span>Profile</span></a>
+                                            <a href="/Users/Profile"><i class="icon-user"></i> <span>Profile</span></a>
                                         </li>
                                         <li>
                                             <a href="javascript:void()">
@@ -246,7 +249,7 @@
                             <i class="icon-user menu-icon"></i><span class="nav-text">BHW</span>
                         </a>
                         <ul aria-expanded="false">
-                            <li><a href="./layout-blank.html">Accounts</a></li>
+                            <li><a href="/Admin/AdminAccountList">Accounts</a></li>
                             <li><a href="./layout-one-column.html">Medicine Availability</a></li>
                             <li><a href="./layout-two-column.html">Medicine Data</a></li>
                             <li><a href="./layout-compact-nav.html">Notifications</a></li>
@@ -276,7 +279,7 @@
                         <ul aria-expanded="false">
                             <li><a href="./app-profile.html">Accounts</a></li>
                             <li><a href="./app-calender.html">Medical Records</a></li>
-                            <li><a href="/Patient/BookedAppointments">Book Appointments</a></li>
+                            <li><a href="/Patient/Booking">Book Appointments</a></li>
                             <li><a href="./app-calender.html">Patient Feedback</a></li>
                         </ul>
                     </li>

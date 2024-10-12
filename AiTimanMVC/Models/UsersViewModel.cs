@@ -6,7 +6,7 @@ namespace AiTimanMVC.Models
 {
     public class UsersViewModel
     {
-        
+
         public string? Id { get; set; }
         [Required]
         [DisplayName("User Name")]

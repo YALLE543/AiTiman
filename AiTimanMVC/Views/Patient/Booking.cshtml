@@ -8,9 +8,9 @@
     <div class="container">
 
         <!-- Create Appointment Button -->
-        <div class="create-appointment-box">
+        @*<div class="create-appointment-box">
             <a href="@Url.Action("Appointment", "HealthProvider")" class="btn btn-lg btn-light">Create Appointment</a>
-        </div>
+        </div>*@
 
         <h3 class="form-title">@ViewData["Title"]</h3>
 
@@ -23,7 +23,6 @@
                         <th>Schedule Time</th>
                         <th>Number of Slots</th>
                         <th>Doctor In Charge</th>
-                        <th>Set By</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
@@ -39,11 +38,10 @@
                                 <td>@appointment.ScheduleTime?.FormattedTime</td>
                                 <td>@appointment.NumberOfSlots</td>
                                 <td>@appointment.DoctorInCharge</td>
-                                <td>@appointment.AppointmentSetter</td>
                                 <td>@appointment.AppointmentStatus</td>
                                 <td>
-                                    <a href="@Url.Action("EditAppointment", "HealthProvider", new { id = appointment.Id })" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="@Url.Action("DeleteAppointment", "HealthProvider", new { id = appointment.Id })" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="@Url.Action("AddBooking", "Patient", new { id = appointment.Id })" class="btn btn-warning btn-sm">BOOK APPOINTMENT</a>
+                                  
                                 </td>
                             </tr>
                         }
@@ -67,7 +65,7 @@
         border-radius: 8px;
         box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
         margin-bottom: 20px; /* Add space below the box */
-        text-align:right; /* Center the content */
+        text-align: right; /* Center the content */
     }
 
     .appointments-table {

@@ -1,0 +1,253 @@
+﻿@using Newtonsoft.Json;
+@model AiTimanMVC.Models.BookedViewModel
+@{
+    ViewData["Title"] = "Book Appointment";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml"; // Ensure this path is correct
+}
+<div class="content-body">
+    <!-- Left Side: Appointment Form -->
+    <div class="form-container">
+        <h3 class="form-title">@ViewData["Title"]</h3>
+        <form asp-action="AddBooking" method="post">
+            <input type="hidden" asp-for="Id" /> <!-- Hidden input for appointment ID -->
+
+            <div asp-validation-summary="None" class="text-danger"></div>
+
+            <!-- Appointment Details -->
+            <h4>Appointment Details</h4>
+            <div class="form-group">
+                <label asp-for="AppointmentModel.AppointmentName">Appointment Name</label>
+                <input asp-for="AppointmentModel.AppointmentName" class="form-control" required />
+                <span asp-validation-for="AppointmentModel.AppointmentName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AppointmentModel.ScheduleDate">Schedule Date</label>
+                <input asp-for="AppointmentModel.ScheduleDate" class="form-control"  required />
+                <span asp-validation-for="AppointmentModel.ScheduleDate" class="text-danger"></span>
+            </div>
+
+           @* <div class="form-group">
+                <label asp-for="AppointmentScheduleTime">Schedule Time</label>
+                <select asp-for="AppointmentScheduleTime" class="form-control" required>
+                    <option value="">Select a time slot</option>
+                    @foreach (var slot in Model.AppointmentModel.TimeSlots)
+                    {
+                        <option value="@slot.Key">@slot.Value.FormattedTimeRange</option>
+                    }
+                </select>
+                <span asp-validation-for="AppointmentScheduleTime" class="text-danger"></span>
+            </div>*@
+
+            <div class="form-group">
+                <label asp-for="AppointmentModel.DoctorInCharge">Doctor In Charge</label>
+                <input asp-for="AppointmentModel.DoctorInCharge" class="form-control" required />
+                <span asp-validation-for="AppointmentModel.DoctorInCharge" class="text-danger"></span>
+            </div>
+
+            <!-- User Details -->
+            <h4>Patient Information</h4>
+            <div class="form-group">
+                <label asp-for="UsersModel.UserName">User Name</label>
+                <input asp-for="UsersModel.UserName" class="form-control"  required />
+                <span asp-validation-for="UsersModel.UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersModel.Email">Email</label>
+                <input asp-for="UsersModel.Email" class="form-control"  required />
+                <span asp-validation-for="UsersModel.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersModel.Address">Address</label>
+                <input asp-for="UsersModel.Address" class="form-control"  required />
+                <span asp-validation-for="UsersModel.Address" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersModel.Birthdate">Birthdate</label>
+                <input asp-for="UsersModel.Birthdate" class="form-control"  type="date" required />
+                <span asp-validation-for="UsersModel.Birthdate" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersModel.Age">Age</label>
+                <input asp-for="UsersModel.Age" class="form-control"  required />
+                <span asp-validation-for="UsersModel.Age" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="UsersModel.Gender">Gender</label>
+                <input asp-for="UsersModel.Gender" class="form-control"  required />
+                <span asp-validation-for="UsersModel.Gender" class="text-danger"></span>
+            </div>
+
+            <!-- Guardian Name (conditional display) -->
+            <div class="form-group" id="guardian-group" style="display:none;">
+                <label asp-for="UsersModel.GuardianName">Guardian Name</label>
+                <input asp-for="UsersModel.GuardianName" class="form-control"  id="guardianName" />
+                <span asp-validation-for="UsersModel.GuardianName" class="text-danger"></span>
+            </div>
+
+            <br />
+            <button type="submit" value="AddBooking" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function checkAge() {
+        const birthdate = document.getElementById('birthdate').value;
+        if (birthdate) {
+            const birthDateObj = new Date(birthdate);
+            const ageDifMs = Date.now() - birthDateObj.getTime();
+            const ageDate = new Date(ageDifMs);
+            const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+            document.getElementById('UsersModel_Age').value = age;
+
+            const guardianGroup = document.getElementById('guardian-group');
+            if (age < 18 || age >= 60) {
+                guardianGroup.style.display = 'block';
+            } else {
+                guardianGroup.style.display = 'none';
+            }
+        }
+    }
+</script>
+
+
+
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center; /* Center the content */
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px; /* Increased padding for more spacious look */
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
+            width: 100%; /* Full width of the container */
+            max-width: 900px; /* Set a max width for larger screens */
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 2rem; /* Increased font size for the title */
+            margin-bottom: 1.5rem;
+            color: #333;
+        background-color: lightskyblue;
+        color:black;
+
+        }
+
+        .form-inline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-label-inline {
+            width: 30%; /* Adjust the percentage as needed */
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .form-control-inline {
+            width: 65%; /* Adjust width based on label */
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        /* Updated Step Indicator Styles */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0; /* Add margin for spacing */
+        }
+
+        .step {
+            background-color: #e0e0e0; /* Step background color */
+            color: #333;
+            border-radius: 5px;
+            padding: 10px 15px; /* Padding for steps */
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1; /* Make steps expand evenly */
+            transition: background 0.3s, color 0.3s; /* Transition effects */
+        }
+
+            .step.active {
+                background-color: #007bff; /* Active step background */
+                color: white; /* Active step text color */
+            }
+
+        /* Calendar styles */
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .calendar-day {
+            padding: 15px;
+            background: #ffffff;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: background 0.3s; /* Transition for hover effect */
+        }
+
+            .calendar-day:hover {
+                background-color: #e9ecef; /* Hover effect */
+            }
+
+        .calendar-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header div {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .calendar-day[style*="background-color: #ffcccb"] {
+            background-color: steelblue !important; /* Stronger red for better visibility */
+        }
+    </style>
+

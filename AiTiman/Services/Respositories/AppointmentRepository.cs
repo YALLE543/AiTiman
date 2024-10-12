@@ -24,7 +24,7 @@ namespace AiTiman_API.Services.Respositories
             _appointmentCollection = mongoDatabase.GetCollection<Appointment>(aiTimanDatabaseSettings.Value.AppointmentCollectionName);
         }
 
-        public async Task<(bool, string)> AddNewAppointment(CreateAppointmentDTO createAppointment)
+        public async Task<(bool, string)> AddNewAppointment(CreateAppointmentDTO createAppointment, string userName)
         {
             // Validate AppointmentName
             if (string.IsNullOrWhiteSpace(createAppointment.AppointmentName))
@@ -38,6 +38,7 @@ namespace AiTiman_API.Services.Respositories
                 return (false, "Schedule date must be today or in the future.");
             }
 
+            
             // Create the new appointment
             var newAppointment = new Appointment
             {
@@ -165,6 +166,16 @@ namespace AiTiman_API.Services.Respositories
             {
                 return (false, "Failed to update the appointment.");
             }
+        }
+        public async Task<List<DateTime>> FetchAppointmentDates()
+        {
+            // Fetch only the ScheduleDate field for all appointments
+            var dates = await _appointmentCollection
+                .Find(_ => true)
+                .Project(a => a.ScheduleDate)
+                .ToListAsync();
+
+            return dates;
         }
 
     }

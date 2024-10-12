@@ -54,7 +54,7 @@ namespace AiTiman_API.Controllers
             return Ok(message);
         }
 
-       
+
         [HttpGet("GetUserProfile/{userName}")]
         public async Task<IActionResult> GetUserProfile(string userName)
         {
@@ -97,6 +97,7 @@ namespace AiTiman_API.Controllers
             // Return user data including role (you might want to return more details)
             return Ok(new
             {
+                user.Id,
                 user.UserName,
                 user.Role,
                 user.Email
@@ -104,4 +105,3 @@ namespace AiTiman_API.Controllers
         }
     }
 }
-

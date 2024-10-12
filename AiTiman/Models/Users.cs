@@ -12,7 +12,7 @@ namespace AiTiman_API.Models
         [BsonRequired]
         [BsonElement("User Name")]
         public string? UserName { get; set; }
-        
+
         [BsonElement("Email")]
         public String? Email { get; set; }
 

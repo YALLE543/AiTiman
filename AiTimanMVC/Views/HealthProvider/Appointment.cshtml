@@ -1,4 +1,5 @@
-﻿@model AiTimanMVC.Models.AppointmentViewModel
+﻿@using Newtonsoft.Json;
+@model AiTimanMVC.Models.AppointmentViewModel
 @{
     ViewData["Title"] = "Set Appointment";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -10,52 +11,56 @@
             <h3 class="form-title">@ViewData["Title"]</h3>
 
             <form asp-action="Appointment" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
 
-                <div asp-validation-summary="All" class="text-danger">
-
+                <!-- Appointment Name -->
                 <div class="form-floating mb-3">
                     <input asp-for="AppointmentName" class="form-control" required />
                     <label asp-for="AppointmentName">Appointment Name</label>
                     <span asp-validation-for="AppointmentName" class="text-danger"></span>
                 </div>
+
+                <!-- Schedule Date -->
                 <div class="form-floating mb-3">
                     <input asp-for="ScheduleDate" class="form-control" type="date" required />
                     <label asp-for="ScheduleDate">Schedule Date</label>
                     <span asp-validation-for="ScheduleDate" class="text-danger"></span>
                 </div>
 
+                <!-- Start Time -->
                 <div class="form-floating mb-3">
-                    <input asp-for="ScheduleTime" class="form-control"  required />
-                    <label asp-for="ScheduleTime">Schedule Time</label>
-                    <span asp-validation-for="ScheduleTime" class="text-danger"></span>
+                    <div class="d-flex justify-content-between">
+                        <div class="flex-fill me-2">
+                            <input asp-for="ScheduleTime.StartTime" class="form-control" type="time" required id="start-time" />
+                            <label asp-for="ScheduleTime.StartTime">Start Time</label>
+                            <span asp-validation-for="ScheduleTime.StartTime" class="text-danger"></span>
+                        </div>
+                        <div class="flex-fill ms-2">
+                            <input asp-for="ScheduleTime.EndTime" class="form-control" type="time" required id="end-time" />
+                            <label asp-for="ScheduleTime.EndTime">End Time</label>
+                            <span asp-validation-for="ScheduleTime.EndTime" class="text-danger"></span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-floating mb-3">
-                    <input asp-for="NumberOfSlots" class="form-control" type="number" min="1" required />
-                    <label asp-for="NumberOfSlots">Number of Slots</label>
-                    <span asp-validation-for="NumberOfSlots" class="text-danger"></span>
-                </div>
-
+                <!-- Schedule Time Slots (Generated Based on Start/End Time) -->
+                <!-- Doctor In Charge -->
                 <div class="form-floating mb-3">
                     <input asp-for="DoctorInCharge" class="form-control" required />
                     <label asp-for="DoctorInCharge">Doctor In Charge</label>
                     <span asp-validation-for="DoctorInCharge" class="text-danger"></span>
                 </div>
 
-                    <div class="form-floating mb-3">
-                        <input asp-for="AppointmentSetter" class="form-control" required />
-                        <label asp-for="AppointmentSetter">Set By:</label>
-                        <span asp-validation-for="AppointmentSetter" class="text-danger"></span>
-                    </div>
+                <!-- Appointment Setter (Read-only, current user) -->
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" value="@ViewBag.CurrentUser?.UserName" readonly />
+                    <label>Appointment Setter</label>
+                </div>
 
-
-
-
-                    <button type="submit" value="Appointment" class="btn btn-lg btn-primary w-100">Submit Booking</button>
-               </div>
+                <!-- Submit Button -->
+                <button type="submit" value="Appointment" class="btn btn-lg btn-primary w-100">Set Appointment</button>
             </form>
         </div>
-       
 
         <!-- Right Side: Calendar Picker -->
         <div class="calendar-container">
@@ -75,69 +80,128 @@
                     <div>Fri</div>
                     <div>Sat</div>
                 </div>
-                <!-- Calendar days will be dynamically generated here -->
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    const appointmentDates = @Html.Raw(JsonConvert.SerializeObject(Model.AppointmentDates));
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const calendarElement = document.getElementById('calendar');
-            const monthYearElement = document.getElementById('month-year');
-            const prevMonthButton = document.getElementById('prev-month');
-            const nextMonthButton = document.getElementById('next-month');
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarElement = document.getElementById('calendar');
+        const monthYearElement = document.getElementById('month-year');
+        const prevMonthButton = document.getElementById('prev-month');
+        const nextMonthButton = document.getElementById('next-month');
 
-            let currentDate = new Date();
+        // Fetch the ScheduleDate input element
+        const scheduleDateInput = document.querySelector('input[name="ScheduleDate"]');
 
-            function generateCalendar(date) {
-                calendarElement.innerHTML = '';
-                const year = date.getFullYear();
-                const month = date.getMonth();
+        // Fix timezone issue when setting ScheduleDate
+        scheduleDateInput.addEventListener('change', function () {
+            const selectedDate = new Date(scheduleDateInput.value);
 
-                const firstDay = new Date(year, month, 1).getDay();
-                const lastDate = new Date(year, month + 1, 0).getDate();
+            // Get the local timezone offset in minutes and adjust the selected date by subtracting the offset
+            const timezoneOffsetInMinutes = selectedDate.getTimezoneOffset();
+            selectedDate.setMinutes(selectedDate.getMinutes() - timezoneOffsetInMinutes);
 
-                for (let i = 0; i < firstDay; i++) {
-                    const emptyDiv = document.createElement('div');
-                    calendarElement.appendChild(emptyDiv);
-                }
+            // Format the date to yyyy-MM-dd without converting to UTC
+            const formattedDate = selectedDate.getFullYear() + '-' +
+                String(selectedDate.getMonth() + 1).padStart(2, '0') + '-' +
+                String(selectedDate.getDate()).padStart(2, '0');
 
-                for (let day = 1; day <= lastDate; day++) {
-                    const dayDiv = document.createElement('div');
-                    dayDiv.className = 'calendar-day';
-                    dayDiv.innerText = day;
+            scheduleDateInput.value = formattedDate;
+        });
 
-                    const dayOfWeek = new Date(year, month, day).getDay();
+        let currentDate = new Date();
 
-                    // Highlight Sundays in red
-                    if (dayOfWeek === 0) {
-                        dayDiv.style.color = 'red';
-                    } else {
-                        dayDiv.style.color = 'black';
-                    }
+        // Generate Calendar
+        function generateCalendar(date) {
+            calendarElement.innerHTML = '';
+            const year = date.getFullYear();
+            const month = date.getMonth();
 
-                    calendarElement.appendChild(dayDiv);
-                }
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
 
-                monthYearElement.innerText = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDiv = document.createElement('div');
+                calendarElement.appendChild(emptyDiv);
             }
 
-            prevMonthButton.addEventListener('click', function () {
-                currentDate.setMonth(currentDate.getMonth() - 1);
-                generateCalendar(currentDate);
-            });
+            for (let day = 1; day <= lastDate; day++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                dayDiv.innerText = day;
 
-            nextMonthButton.addEventListener('click', function () {
-                currentDate.setMonth(currentDate.getMonth() + 1);
-                generateCalendar(currentDate);
-            });
+                const currentDay = new Date(year, month, day);
+                const dayOfWeek = currentDay.getDay();
 
+                if (dayOfWeek === 0) {
+                    dayDiv.style.color = 'red'; // Highlight Sundays
+                }
+
+                const appointmentMatch = appointmentDates.some(appointmentDate => {
+                    const apptDate = new Date(appointmentDate);
+                    return apptDate.getFullYear() === currentDay.getFullYear() &&
+                        apptDate.getMonth() === currentDay.getMonth() &&
+                        apptDate.getDate() === currentDay.getDate();
+                });
+
+                if (appointmentMatch) {
+                    dayDiv.style.backgroundColor = '#ffcccb'; // Highlight dates with appointments
+                }
+
+                calendarElement.appendChild(dayDiv);
+            }
+
+            monthYearElement.innerText = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
+        }
+
+        prevMonthButton.addEventListener('click', function () {
+            currentDate.setMonth(currentDate.getMonth() - 1);
             generateCalendar(currentDate);
         });
-    </script>
-}
+
+        nextMonthButton.addEventListener('click', function () {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar(currentDate);
+        });
+
+        generateCalendar(currentDate);
+
+        // Handle Time Slot Generation Based on Start/End Time
+        const startTimeInput = document.getElementById('start-time');
+        const endTimeInput = document.getElementById('end-time');
+        const timeSlotSelect = document.getElementById('time-slots');
+
+        startTimeInput.addEventListener('change', generateTimeSlots);
+        endTimeInput.addEventListener('change', generateTimeSlots);
+
+        function generateTimeSlots() {
+            timeSlotSelect.innerHTML = ''; // Clear existing options
+
+            const startTime = startTimeInput.value;
+            const endTime = endTimeInput.value;
+
+            if (startTime && endTime) {
+                let start = new Date(`1970-01-01T${startTime}`);
+                const end = new Date(`1970-01-01T${endTime}`);
+
+                while (start < end) {
+                    const slot = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const option = document.createElement('option');
+                    option.value = slot;
+                    option.text = slot;
+                    timeSlotSelect.appendChild(option);
+
+                    start.setHours(start.getHours() + 1); // 1-hour interval
+                }
+            }
+        }
+    });
+</script>
+
 
 <style>
     body {
@@ -205,6 +269,10 @@
         font-size: 14px;
     }
 
+        .calendar-day:hover {
+            background-color: #e9ecef;
+        }
+
     .calendar-navigation {
         display: flex;
         justify-content: space-between;
@@ -217,7 +285,7 @@
         text-align: center;
     }
 
-    .calendar-day:hover {
-        background-color: #e9ecef;
+    .calendar-day[style*="background-color: #ffcccb"] {
+        background-color: steelblue !important; /* Stronger red for better visibility */
     }
 </style>

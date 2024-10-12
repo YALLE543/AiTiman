@@ -8148,7 +8148,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
   top: 5rem;
   padding-top: 0;
   z-index: 99;
-  background-color:lightskyblue;
+  background-color:steelblue;
   transition: all .2s ease; }
   @media only screen and (min-width: 1200px) and (max-width: 1350px) {
     .nk-sidebar {
@@ -8166,7 +8166,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    background-color:lightskyblue; }
+    background-color:steelblue; }
     .nk-sidebar .metismenu > li {
       display: -webkit-box;
       display: -ms-flexbox;

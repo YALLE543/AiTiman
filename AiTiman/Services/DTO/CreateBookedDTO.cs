@@ -19,7 +19,7 @@
 
         public string? GuardianName { get; set; }
 
-        public string? BookingApprovedDate { get; set; }
+        public DateTime? BookingApprovedDate { get; set; }
 
         public string? Gender { get; set; }
 

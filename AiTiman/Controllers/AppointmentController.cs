@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AiTiman_API.Services.Interfaces;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace AiTiman_API.Controllers
 {
@@ -35,13 +36,17 @@ namespace AiTiman_API.Controllers
         [HttpPost("Create-New-Appointment")]
         public async Task<IActionResult> CreateNewAppointment(CreateAppointmentDTO createAppointment)
         {
-            var (isSuccess, message) = await _appointment.AddNewAppointment(createAppointment);
+            var userName = User.FindFirstValue(ClaimTypes.Name); // Get the logged-in user's username
+
+            // Call the AddNewAppointment method with the username
+            (bool isSuccess, string message) = await _appointment.AddNewAppointment(createAppointment, userName);
 
             if (!isSuccess)
                 return BadRequest(message);
 
             return Ok(message);
         }
+
 
         [HttpPut("Update-Appointment")]
         public async Task<IActionResult> UpdateAppointment(string id, UpdateAppointmentDTO updateAppointment)
@@ -63,6 +68,13 @@ namespace AiTiman_API.Controllers
                 return BadRequest(message);
 
             return Ok(message);
+        }
+
+        [HttpGet("GetAppointmentDates")]
+        public async Task<IActionResult> GetAppointmentDates()
+        {
+            var appointmentDates = await _appointment.FetchAppointmentDates();
+            return Ok(appointmentDates);
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿@model IEnumerable<AiTimanMVC.Models.AppointmentViewModel>
+﻿@model IEnumerable<AiTimanMVC.Models.UsersViewModel>
 @{
-    ViewData["Title"] = "Appointments List";
+    ViewData["Title"] = "Admin Account List";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -9,7 +9,7 @@
 
         <!-- Create Appointment Button -->
         <div class="create-appointment-box">
-            <a href="@Url.Action("Appointment", "HealthProvider")" class="btn btn-lg btn-light">Create Appointment</a>
+            <a href="@Url.Action("Appointment", "HealthProvider")" class="btn btn-lg btn-light">Create Admin Account</a>
         </div>
 
         <h3 class="form-title">@ViewData["Title"]</h3>
@@ -18,32 +18,32 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Appointment Name</th>
-                        <th>Schedule Date</th>
-                        <th>Schedule Time</th>
-                        <th>Number of Slots</th>
-                        <th>Doctor In Charge</th>
-                        <th>Set By</th>
-                        <th>Status</th>
+                        <th>Admin UserName</th>
+                        <th>Email</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th>Birthdate</th>
+                        <th>Gender</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if (Model != null && Model.Any())
                     {
-                        foreach (var appointment in Model)
+                        foreach (var user in Model)
                         {
                             <tr>
-                                <td>@appointment.AppointmentName</td>
-                                <td>@appointment.ScheduleDate.ToString("MM/dd/yyyy")</td>
-                                <td>@appointment.ScheduleTime?.FormattedTime</td>
-                                <td>@appointment.NumberOfSlots</td>
-                                <td>@appointment.DoctorInCharge</td>
-                                <td>@appointment.AppointmentSetter</td>
-                                <td>@appointment.AppointmentStatus</td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@user.FirstName</td>
+                                <td>@user.LastName</td>
+                                <td>@user.Age</td>
+                                <td>@user.Birthdate</td>
+                                <td>@user.Gender</td>
                                 <td>
-                                    <a href="@Url.Action("EditAppointment", "HealthProvider", new { id = appointment.Id })" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="@Url.Action("DeleteAppointment", "HealthProvider", new { id = appointment.Id })" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="@Url.Action("EditAppointment", "HealthProvider", new { id = user.Id })" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="@Url.Action("DeleteAppointment", "HealthProvider", new { id = user.Id })" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                         }
@@ -67,7 +67,7 @@
         border-radius: 8px;
         box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
         margin-bottom: 20px; /* Add space below the box */
-        text-align:right; /* Center the content */
+        text-align: right; /* Center the content */
     }
 
     .appointments-table {
