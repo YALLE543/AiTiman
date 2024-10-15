@@ -1,0 +1,129 @@
+﻿@model AiTimanMVC.Models.ReferralViewModel
+@{
+    ViewData["Title"] = "Edit Referral";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="edit-referral-content">
+    <div class="edit-referral-container">
+        <div class="edit-referral-header">
+            <h2 class="edit-referral-title">Edit Referral</h2>
+        </div>
+
+        <div class="edit-referral-body">
+            <form asp-action="EditReferral" method="post">
+                @* Include a hidden field for the ID *@
+                <input asp-for="Id" type="hidden" />
+
+                <!-- Patient Name -->
+                <div class="form-group row mb-4">
+                    <label asp-for="PatientName" class="col-sm-3 col-form-label referral-label">Patient Name</label>
+                    <div class="col-sm-9">
+                        <input asp-for="PatientName" class="form-control" required />
+                        <span asp-validation-for="PatientName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Diagnosis-->
+                <div class="form-group row mb-4">
+                    <label asp-for="Diagnosis" class="col-sm-3 col-form-label referral-label">Diagnosis</label>
+                    <div class="col-sm-9">
+                        <input asp-for="Diagnosis" class="form-control" required />
+                        <span asp-validation-for="Diagnosis" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Details-->
+                <div class="form-group row mb-4">
+                    <label asp-for="RefferTo" class="col-sm-3 col-form-label referral-label">RefferTo</label>
+                    <div class="col-sm-9">
+                        <input asp-for="RefferTo" class="form-control" required />
+                        <span asp-validation-for="RefferTo" class="text-danger"></span>
+                    </div>
+                </div>
+
+             
+
+                <!-- Save Button -->
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-lg btn-primary edit-referral-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Container for Editing Referral*/
+    .edit-referral-container {
+        background-color: #f9f9f9;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
+        max-width: 800px;
+        margin: 50px auto;
+    }
+
+    /* ReferralHeader Styles */
+    .edit-referral-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .edit-referral-title {
+        font-family: 'Roboto', sans-serif;
+        font-size: 2rem;
+        color: #333;
+        letter-spacing: 1px;
+        font-weight: 600;
+    }
+
+    /* Form Label Styles */
+    .referral-label {
+        font-weight: 600;
+        color: #007bff;
+        font-size: 1.1rem;
+    }
+
+    /* Input and Textarea Styles */
+    .form-control, .referral-textarea {
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        padding: 10px;
+        background: #fff;
+        transition: border-color 0.3s ease;
+    }
+
+        .form-control:focus, .referral-textarea:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+        }
+
+    /* Button Styles */
+    .edit-referral-btn {
+        width: 50%;
+        padding: 15px;
+        background-color: #007bff;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+        .edit-referral-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+    /* Additional Styles */
+    .edit-referral-body {
+        padding: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
