@@ -1,0 +1,113 @@
+﻿@model AiTimanMVC.Models.PrescriptionViewModel
+@{
+    ViewData["Title"] = "Delete Prescription";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="content-body">
+    <div class="container">
+        <!-- Left Side: Delete Referral Form -->
+        <div class="form-container">
+            <h3 class="form-title">@ViewData["Title"]</h3>
+
+            <form asp-action="Delete" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <p>Are you sure you want to delete the Prescription: <strong>@Model.PatientName</strong>?</p>
+                </div>
+
+                <input type="hidden" asp-for="Id" /> <!-- Assuming you have an Id property to identify the Referral -->
+
+                <button type="submit" class="btn btn-lg btn-danger w-100">Delete Prescription</button>
+                <a asp-action="Prescription" class="btn btn-lg btn-secondary w-100">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .form-container, .calendar-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(173, 216, 230, 0.4), 0 6px 20px rgba(173, 216, 230, 0.3);
+        }
+
+        .form-title {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+            button.btn-danger {
+                background-color: #dc3545; /* Bootstrap danger color */
+            }
+
+            button.btn-secondary {
+                background-color: #6c757d; /* Bootstrap secondary color */
+            }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .calendar-day {
+            padding: 15px;
+            background: #ffffff;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .calendar-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header div {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .calendar-day:hover {
+            background-color: #e9ecef;
+        }
+    </style>
