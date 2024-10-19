@@ -10,6 +10,7 @@ namespace AiTiman_API.Services.Interfaces
         Task<Booked> fetchBooked(string? id);
         Task<(bool, string)> UpdateBooked(string id, UpdateBookedDTO updateBooked);
         Task<(bool, string)> DeleteBooked(string? id);
+        Task<List<string>> FetchTimeSlotBookings(DateTime appointmentDate);
 
     }
 }

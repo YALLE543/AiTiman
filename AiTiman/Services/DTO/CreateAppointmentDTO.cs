@@ -6,7 +6,7 @@ namespace AiTiman_API.Services.DTO
     {
         public string? AppointmentName { get; set; }
 
-        public DateTime ScheduleDate { get; set; }
+        public DateTime ScheduleDate { get; set; } = DateTime.UtcNow.ToLocalTime();
 
         public string? ScheduleTime { get; set; } // Use long to receive ticks
 

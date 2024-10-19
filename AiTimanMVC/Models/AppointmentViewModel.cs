@@ -14,7 +14,7 @@ namespace AiTimanMVC.Models
 
         [Required]
         [DisplayName("Schedule Date")]
-        public DateTime ScheduleDate { get; set; }
+        public DateTime ScheduleDate { get; set; } = DateTime.UtcNow.ToLocalTime();
 
         [Required]
         [DisplayName("Number of Slots")]
@@ -41,7 +41,7 @@ namespace AiTimanMVC.Models
         public Dictionary<string, TimeSlotViewModel> TimeSlots { get; set; } = new Dictionary<string, TimeSlotViewModel>();
 
 
-        
+
         [Required]
         [DisplayName("Date Created")]
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
@@ -95,8 +95,8 @@ namespace AiTimanMVC.Models
             var slots = new Dictionary<string, TimeSlotViewModel>();
             DateTime startTime = DateTime.Today.AddHours(9); // 9 AM
             DateTime endTime = DateTime.Today.AddHours(17);  // 5 PM
-
-           
+            startTime = startTime.AddMinutes(60);
+            
             while (startTime < endTime)
             {
                 slots.Add(startTime.ToString("h:mm tt"), new TimeSlotViewModel
@@ -109,6 +109,7 @@ namespace AiTimanMVC.Models
                     BookingCount = 0 // Initialize with 0 bookings
                 });
                 startTime = startTime.AddMinutes(60);
+                
             }
             return slots;
         }

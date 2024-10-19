@@ -39,7 +39,7 @@ namespace AiTimanMVC.Controllers
         public IActionResult AdminAccountList()
         {
             List<UsersViewModel> userslist = new List<UsersViewModel>();
-            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Users/AllUsers/All-Userss").Result;
+            HttpResponseMessage response = _client.GetAsync(_client.BaseAddress + "/Users/AllUsers/All-Users").Result;
 
             if (response.IsSuccessStatusCode)
             {

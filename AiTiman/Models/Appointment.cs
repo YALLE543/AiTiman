@@ -13,7 +13,7 @@ namespace AiTiman_API.Models
         public string? AppointmentName { get; set; }
 
         [BsonElement("Schedule Date")]
-        public DateTime ScheduleDate { get; set; }
+        public DateTime ScheduleDate { get; set; } = DateTime.UtcNow.ToLocalTime();
 
         [BsonElement("Schedule Time")]
         public string? ScheduleTime { get; set; }

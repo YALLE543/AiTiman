@@ -210,7 +210,8 @@ namespace AiTimanMVC.Controllers
                         },
                         BookingCount = 0 // Initialize with 0 bookings
                     });
-                    startTime = startTime.AddMinutes(60);  // 30-minute interval
+                    startTime = startTime.AddMinutes(60);
+                    // 30-minute interval
                 }
             }
 
@@ -238,8 +239,6 @@ namespace AiTimanMVC.Controllers
 
 
 
-
-
         [HttpPost]
         public IActionResult Appointment(AppointmentViewModel model)
         {
@@ -260,7 +259,7 @@ namespace AiTimanMVC.Controllers
                 if (DateTime.TryParseExact(model.ScheduleDate.ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out scheduleDate))
                 {
                     // Convert the parsed date to UTC
-                    DateTime utcScheduleDate = scheduleDate.ToUniversalTime();
+                    DateTime utcScheduleDate = scheduleDate.ToLocalTime();
 
                     // If model.ScheduleDate is a DateTime, assign the formatted date
                     model.ScheduleDate = utcScheduleDate; // Assuming model.ScheduleDate is a DateTime

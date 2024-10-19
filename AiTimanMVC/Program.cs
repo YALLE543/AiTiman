@@ -17,6 +17,8 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddSingleton<IUsers, UsersRepository>();
+builder.Services.AddSingleton<IUser, UserRepository>();
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

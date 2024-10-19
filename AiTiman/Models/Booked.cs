@@ -58,7 +58,11 @@ namespace AiTiman_API.Models
         [BsonElement("Date Updated")]
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
 
-
+        public class TimeRangeViewModel
+        {
+            public TimeSpan StartTime { get; set; }
+            public TimeSpan EndTime { get; set; }
+        }
     }
 
 }

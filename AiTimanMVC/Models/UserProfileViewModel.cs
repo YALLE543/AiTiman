@@ -3,6 +3,6 @@
     public class UserProfileViewModel
     {
         public string UserName { get; set; }
-        public string ProfilePic { get; set; }
+        public byte[] ProfilePic { get; set; }
     }
 }

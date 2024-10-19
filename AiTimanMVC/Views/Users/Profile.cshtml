@@ -16,25 +16,18 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="media align-items-center mb-4 position-relative">
-                            <!-- Profile Picture with Edit Icon -->
-                            @*<div class="position-relative">
+                            <div class="position-relative">
                                 <!-- Image Preview -->
-                                @if (Model.ProfilePic != null && Model.ProfilePic.Length > 0)
+                                @if (!string.IsNullOrEmpty(Model.Id)) // Check if UserId is available
                                 {
-                                    // Convert byte[] to Base64 string
-                                    var base64String = Convert.ToBase64String(Model.ProfilePic);
-                                    var imageSrc = $"data:image/png;base64,{base64String}";
-                                    <img id="profilePic" class="mr-3 rounded-circle"
-                                     src="@imageSrc"
-                                     width="80" height="80" alt="Profile Picture" />
+                                    var profilePicUrl = Url.Action("GetProfilePic", "UsersController", new { userId = Model.Id });
+                                    <img id="profilePic" class="mr-3 rounded-circle" src="@profilePicUrl" width="80" height="80" alt="Profile Picture" />
                                 }
                                 else
                                 {
-                                    <img id="profilePic" class="mr-3 rounded-circle"
-                                     src="~/images/Timan/user.png"
-                                     width="80" height="80" alt="Profile Picture" />
+                                    <img id="profilePic" class="mr-3 rounded-circle" src="~/images/Timan/user.png" width="80" height="80" alt="Profile Picture" />
                                 }
-                            </div>*@
+                            </div>
                         </div>
                         <div class="row mb-5">
                             <div class="col">

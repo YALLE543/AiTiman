@@ -43,7 +43,7 @@ namespace AiTiman_API.Services.Respositories
             var newAppointment = new Appointment
             {
                 AppointmentName = createAppointment.AppointmentName,
-                ScheduleDate = createAppointment.ScheduleDate,
+                ScheduleDate = createAppointment.ScheduleDate.AddHours(8), // Convert UTC to UTC+8 for local time
                 ScheduleTime = createAppointment.ScheduleTime,
                 AppointmentStatus = createAppointment.AppointmentStatus, // Set automatically
                 AppointmentSetter = createAppointment.AppointmentSetter,

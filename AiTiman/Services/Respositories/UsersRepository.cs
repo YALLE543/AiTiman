@@ -71,6 +71,7 @@ namespace AiTiman_API.Services.Respositories
                 DateCreated = DateTime.UtcNow,
                 DateUpdated = DateTime.UtcNow
             };
+            
 
             // Insert the new Users into the database
             await _UsersCollection.InsertOneAsync(newUsers);

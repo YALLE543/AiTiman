@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static AiTiman_API.Models.Booked;
 
 namespace AiTiman_API.Services.Repositories
 {
@@ -55,7 +56,7 @@ namespace AiTiman_API.Services.Repositories
                 DateCreated = DateTime.UtcNow,
                 DateUpdated = DateTime.UtcNow
             };
-
+          
             await _bookedCollection.InsertOneAsync(newBooked);
             return (true, "New booked appointment created.");
         }
@@ -120,5 +121,48 @@ namespace AiTiman_API.Services.Repositories
             else
                 return (false, "Failed to update the booking.");
         }
+
+        public async Task<List<string>> FetchTimeSlotBookings(DateTime appointmentDate)
+        {
+            // Predefined time range (9 AM to 5 PM) for available slots
+            var defaultScheduleTime = new TimeRangeViewModel
+            {
+                StartTime = TimeSpan.FromHours(9),  // 9 AM
+                EndTime = TimeSpan.FromHours(17)    // 5 PM
+            };
+
+            // Fetch all the booked slots for the given appointment date
+            var bookedSlots = await _bookedCollection
+                .Find(a => a.AppointmentScheduleDate == appointmentDate)
+                .Project(a => a.AppointmentScheduleTime) // Assuming ScheduleTime is stored as string in "hh:mm tt" format
+                .ToListAsync();
+
+            // Initialize a list of available time slots
+            List<string> availableTimeSlots = new List<string>();
+
+            // Start generating time slots from 9 AM to 5 PM
+            DateTime startTime = appointmentDate.Date.Add(defaultScheduleTime.StartTime);
+            DateTime endTime = appointmentDate.Date.Add(defaultScheduleTime.EndTime);
+            endTime = endTime.AddMinutes(-60);  // Adjust end time so last slot ends at 5 PM
+
+            // Generate time slots in 1-hour intervals
+            while (startTime < endTime)
+            {
+                // Create the time slot as a range (e.g., "9:00 AM - 10:00 AM")
+                string timeSlot = $"{startTime.ToString("h:mm tt")} - {startTime.AddHours(1).ToString("h:mm tt")}";
+
+                // If this time slot is not booked, add it to the list of available slots
+                if (!bookedSlots.Contains(startTime.ToString("h:mm tt")))
+                {
+                    availableTimeSlots.Add(timeSlot);
+                }
+
+                // Move to the next 1-hour slot
+                startTime = startTime.AddHours(1);
+            }
+
+            return availableTimeSlots; // Return the list of available time slots
+        }
+
     }
 }

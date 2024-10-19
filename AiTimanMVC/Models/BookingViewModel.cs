@@ -85,91 +85,91 @@ namespace AiTimanMVC.Models
 
         public DateTime DateUpdated { get; set; } = DateTime.UtcNow;
 
-        public class TimeSlotViewModel
-        {
-            public TimeRangeViewModel TimeRange { get; set; }
-            public int BookingCount { get; set; } = 0; // Default booking count is 0
+        //public class TimeSlotViewModel
+        //{
+        //    //public TimeRangeViewModel TimeRange { get; set; }
+        //    public int BookingCount { get; set; } = 0; // Default booking count is 0
 
-            public string FormattedTimeRange
-            {
-                get
-                {
-                    return $"{(TimeRange.StartTime.Hours % 12 == 0 ? 12 : TimeRange.StartTime.Hours % 12)}:{TimeRange.StartTime.Minutes:D2} - " +
-                           $"{(TimeRange.EndTime.Hours % 12 == 0 ? 12 : TimeRange.EndTime.Hours % 12)}:{TimeRange.EndTime.Minutes:D2}";
-                }
-            }
-        }
+        //    public string FormattedTimeRange
+        //    {
+        //        get
+        //        {
+        //            return $"{(TimeRange.StartTime.Hours % 12 == 0 ? 12 : TimeRange.StartTime.Hours % 12)}:{TimeRange.StartTime.Minutes:D2} - " +
+        //                   $"{(TimeRange.EndTime.Hours % 12 == 0 ? 12 : TimeRange.EndTime.Hours % 12)}:{TimeRange.EndTime.Minutes:D2}";
+        //        }
+        //    }
+        //}
 
 
 
       
-        public Dictionary<string, TimeSlotViewModel> GenerateTimeSlots()
-        {
-            var slots = new Dictionary<string, TimeSlotViewModel>();
-            DateTime startTime = DateTime.Today.AddHours(9); // 9 AM
-            DateTime endTime = DateTime.Today.AddHours(17);  // 5 PM
+        //public Dictionary<string, TimeSlotViewModel> GenerateTimeSlots()
+        //{
+        //    var slots = new Dictionary<string, TimeSlotViewModel>();
+        //    DateTime startTime = DateTime.Today.AddHours(9); // 9 AM
+        //    DateTime endTime = DateTime.Today.AddHours(17);  // 5 PM
 
 
-            while (startTime < endTime)
-            {
-                slots.Add(startTime.ToString("h:mm tt"), new TimeSlotViewModel
-                {
-                    TimeRange = new TimeRangeViewModel
-                    {
-                        StartTime = startTime.TimeOfDay,
-                        EndTime = startTime.AddMinutes(60).TimeOfDay
-                    },
-                    BookingCount = 0 // Initialize with 0 bookings
-                });
-                startTime = startTime.AddMinutes(60);
-            }
-            return slots;
-        }
+        //    while (startTime < endTime)
+        //    {
+        //        slots.Add(startTime.ToString("h:mm tt"), new TimeSlotViewModel
+        //        {
+        //            TimeRange = new TimeRangeViewModel
+        //            {
+        //                StartTime = startTime.TimeOfDay,
+        //                EndTime = startTime.AddMinutes(60).TimeOfDay
+        //            },
+        //            BookingCount = 0 // Initialize with 0 bookings
+        //        });
+        //        startTime = startTime.AddMinutes(60);
+        //    }
+        //    return slots;
+        //}
 
        
-        public class TimeRangeConverter : JsonConverter
-        {
+        //public class TimeRangeConverter : JsonConverter
+        //{
           
-            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
-            {
-                if (value is TimeRangeViewModel timeRange)
-                {
-                    DateTime startDateTime = DateTime.Today.Add(timeRange.StartTime);
-                    DateTime endDateTime = DateTime.Today.Add(timeRange.EndTime);
+        //    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        //    {
+        //        if (value is TimeRangeViewModel timeRange)
+        //        {
+        //            DateTime startDateTime = DateTime.Today.Add(timeRange.StartTime);
+        //            DateTime endDateTime = DateTime.Today.Add(timeRange.EndTime);
 
 
-                   string timeRangeString = $"{startDateTime.ToString("h:mm tt")} - {endDateTime.ToString("h:mm tt")}";
-                   writer.WriteValue(timeRangeString);
-                }
-                else
-                {
-                    throw new JsonSerializationException("Expected TimeRangeViewModel object value.");
-                }
-            }
+        //           string timeRangeString = $"{startDateTime.ToString("h:mm tt")} - {endDateTime.ToString("h:mm tt")}";
+        //           writer.WriteValue(timeRangeString);
+        //        }
+        //        else
+        //        {
+        //            throw new JsonSerializationException("Expected TimeRangeViewModel object value.");
+        //        }
+        //    }
 
-            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
-            {
-                string timeRangeString = (string)reader.Value;
-                Console.WriteLine($"Parsing Time Range: {timeRangeString}"); // Log the input for debugging
+        //    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        //    {
+        //        string timeRangeString = (string)reader.Value;
+        //        Console.WriteLine($"Parsing Time Range: {timeRangeString}"); // Log the input for debugging
 
-                var timeParts = timeRangeString.Split(" - ");
+        //        var timeParts = timeRangeString.Split(" - ");
 
-                if (timeParts.Length == 2)
-                {
-                    return new TimeRangeViewModel
-                    {
-                        StartTime = DateTime.Parse(timeParts[0].Trim()).TimeOfDay,
-                        EndTime = DateTime.Parse(timeParts[1].Trim()).TimeOfDay
-                    };
-                }
+        //        if (timeParts.Length == 2)
+        //        {
+        //            return new TimeRangeViewModel
+        //            {
+        //                StartTime = DateTime.Parse(timeParts[0].Trim()).TimeOfDay,
+        //                EndTime = DateTime.Parse(timeParts[1].Trim()).TimeOfDay
+        //            };
+        //        }
 
-                throw new JsonSerializationException("Invalid time range format.");
-            }
+        //        throw new JsonSerializationException("Invalid time range format.");
+        //    }
 
-            public override bool CanConvert(Type objectType)
-            {
-                return objectType == typeof(TimeRangeViewModel);
-            }
-        }
+        //    public override bool CanConvert(Type objectType)
+        //    {
+        //        return objectType == typeof(TimeRangeViewModel);
+        //    }
+        //}
     }
 }

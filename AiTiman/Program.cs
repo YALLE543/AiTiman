@@ -19,6 +19,7 @@ namespace AiTiman_API
             // Add Scope of Interface and Repository
             builder.Services.AddScoped<IAppointment, AppointmentRepository>();
             builder.Services.AddScoped<IUsers, UsersRepository>();
+            builder.Services.AddScoped<IUser, UserRepository>();
             builder.Services.AddScoped<IBooked, BookedRepository>();
             builder.Services.AddSingleton<IUsers, UsersRepository>();
             // Add services to the container.

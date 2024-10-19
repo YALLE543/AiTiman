@@ -72,8 +72,12 @@ namespace AiTiman_API.Controllers
             return Ok(message);
 
         }
-
-
+        [HttpGet("GetTimeSlotBookings")]
+        public async Task<IActionResult> GetTimeSlotBookings([FromQuery] DateTime appointmentDate)
+        {
+            var appointmentDates = await _booked.FetchTimeSlotBookings(appointmentDate);
+            return Ok(appointmentDates);
+        }
     }
 }
 

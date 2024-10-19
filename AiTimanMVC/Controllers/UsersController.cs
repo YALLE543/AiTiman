@@ -10,6 +10,7 @@ using AiTiman_API.Services.DTO;
 using AiTiman_API.Services.Interfaces;
 using AiTiman_API.Services.Respositories;
 using AiTiman_API.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AiTimanMVC.Controllers
 {
@@ -57,6 +58,24 @@ namespace AiTimanMVC.Controllers
                 return View();
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProfilePic(string userId)
+        {
+            // Fetch the user using the UsersRepository
+            var user = await _userService.fetchUsers(userId); // Using your repository method
+
+            // Check if user exists and has a profile picture
+            if (user != null && user.ProfilePic != null && user.ProfilePic.Length > 0)
+            {
+                // Return the image byte array as a FileResult
+                return File(user.ProfilePic, "image/jpeg"); // Adjust content type based on the image type
+            }
+
+            // Return a default image if no profile pic is found
+            return File("~/images/Timan/user.png", "image/png");
+        }
+
 
         [HttpGet]
         public IActionResult Register()
@@ -158,27 +177,6 @@ namespace AiTimanMVC.Controllers
                 return View(model);
             }
         }
-
-        //[HttpGet("profile")]
-        //public IActionResult GetProfile()
-        //{
-        //    Return user profile data
-        //    var userProfile = // fetch user profile data
-        //return Ok(userProfile);
-        //}
-
-        //public IActionResult UserProfile()
-        //{
-        //    Fetch user profile using the correct method name
-        //    var userProfile = _userService.GetUserProfileByUsername(User.Identity.Name); // Use GetUserProfileByUsername
-
-        //    if (userProfile == null)
-        //    {
-        //        Handle the case where the user is not found
-        //        return NotFound();
-        //    }
-
-        //    return View(userProfile);
-        //}
+       
     }
 }
